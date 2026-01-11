@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A Gift For You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --red: #c1121f;
+  --soft: #ffe5e5;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, white, var(--soft));
+  overflow: hidden;
+}
+
+/* ---------- SECTIONS ---------- */
+.section {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.05);
+}
+
+/* ---------- HEART ---------- */
+.heart {
+  font-size: 70px;
+  color: var(--red);
+  animation: beat 1.2s infinite;
+}
+
+@keyframes beat {
+  0%,100% { transform: scale(1); }
+  25%,60% { transform: scale(1.2); }
+}
+
+/* ---------- PASSWORD ---------- */
+input {
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 15px;
+  padding: 12px 30px;
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ---------- GIFT ---------- */
+.gift {
+  font-size: 90px;
+  cursor: pointer;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* ---------- LOVE TEXT ---------- */
+.love {
+  text-align: center;
+}
+
+.love h1 {
+  color: var(--red);
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.love p {
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* ---------- ADVANCED HEARTS ---------- */
+.heart-fx {
+  position: absolute;
+  font-size: 22px;
+  pointer-events: none;
+  animation: rise linear forwards;
+  opacity: 0.9;
+}
+
+@keyframes rise {
+  to {
+    transform: translate(var(--x), -120vh) rotate(var(--r));
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK -->
+<div id="lock" class="section">
+  <div class="heart">❤️</div>
+  <h1>A Gift For You</h1>
+  <input type="password" id="pwd" placeholder="Enter password">
+  <button onclick="check()">Unlock</button>
+</div>
+
+<!-- GIFT -->
+<div id="gift" class="section hidden">
+  <div class="gift" onclick="openGift()">🎁</div>
+  <p>Tap to open</p>
+</div>
+
+<!-- LOVE -->
+<div id="love" class="section hidden love">
+  <h1 id="mainText"></h1>
+  <p id="subText">
+    Not just words.<br>
+    Not just today.<br>
+    It’s you — always.
+  </p>
+</div>
+
+<script>
+let attempts = 0;
+const text = "I love you Chuhana babyyy 😘😘💕";
+
+function check() {
+  const pass = document.getElementById("pwd").value;
+
+  if (pass === "011103") {
+    transition("lock", "gift");
+    return;
+  }
+
+  attempts++;
+  if (attempts === 1) alert("Ah… You don't love him 😮‍💨");
+  else if (attempts === 2) alert("Maybe you should ask him ☺️");
+  else alert("Better you ask him 😂");
+}
+
+function openGift() {
+  transition("gift", "love");
+  startTypewriter();
+  setTimeout(startAdvancedHearts, 800);
+}
+
+function transition(from, to) {
+  document.getElementById(from).classList.add("hidden");
+  document.getElementById(to).classList.remove("hidden");
+}
+
+/* ---------- TYPEWRITER ---------- */
+function startTypewriter() {
+  const el = document.getElementById("mainText");
+  let i = 0;
+
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i === text.length) {
+      clearInterval(interval);
+      document.getElementById("subText").style.opacity = 1;
+    }
+  }, 70);
+}
+
+/* ---------- ADVANCED HEART ENGINE ---------- */
+function startAdvancedHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart-fx";
+    heart.textContent = "❤️";
+
+    const startX = Math.random() * window.innerWidth;
+    const driftX = (Math.random() - 0.5) * 200;
+    const rotate = Math.random() * 360;
+    const duration = 4 + Math.random() * 4;
+
+    heart.style.left = startX + "px";
+    heart.style.bottom = "-40px";
+    heart.style.setProperty("--x", driftX + "px");
+    heart.style.setProperty("--r", rotate + "deg");
+    heart.style.animationDuration = duration + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), duration * 1000);
+  }, 180);
+}
+</script>
+
+</body>
+</html>
